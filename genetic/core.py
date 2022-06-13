@@ -59,7 +59,7 @@ def breed(parent1, parent2):
 
     child_p2 = [item for item in parent2 if item not in child_p1]
 
-    child = child_p1 + child_p2
+    child = child_p2[:start_gene] + child_p1 + child_p2[start_gene:]
     return child
 
 
