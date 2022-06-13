@@ -1,0 +1,20 @@
+[flake8]
+
+max-line-length = 100
+
+max-complexity = 6
+
+exclude =
+        .tox
+        .git
+        */migrations/*
+        */static/CACHE/*
+        docs
+        node_modules
+        .venv
+
+show-source = true
+
+ignore =
+    W503  # flake8 and black disagree about -> line break before binary operator
+    E203  # flake8 and black disagree about -> whitespace before ":"
