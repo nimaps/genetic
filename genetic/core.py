@@ -79,13 +79,15 @@ def breed_population(mating_pool, elite_count):
 
 def swap_mutate(chromosome, mutation_rate):
 
-    for swapped in range(len(chromosome)):
-        if random.random() < mutation_rate:
+    if random.random() < mutation_rate:
+        swapped, swap_with = 1, 1
+        while swapped == swap_with:
+            swapped = int(random.random() * len(chromosome))
             swap_with = int(random.random() * len(chromosome))
-            chromosome[swap_with], chromosome[swapped] = (
-                chromosome[swapped],
-                chromosome[swap_with],
-            )
+        chromosome[swap_with], chromosome[swapped] = (
+            chromosome[swapped],
+            chromosome[swap_with],
+        )
     return chromosome
 
 
