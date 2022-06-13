@@ -83,17 +83,8 @@ def ordered_crossover(parent1, parent2):
 
 
 def one_point_crossover(parent1, parent2):
-    child = []
-
     crossover_point = int(random.random() * len(parent1))
-
-    for i in range(crossover_point):
-        child.append(parent1[i])
-
-    for i in range(crossover_point, len(parent2)):
-        child.append(parent2[i])
-
-    return child
+    return parent1[:crossover_point] + parent2[crossover_point:]
 
 
 def swap_mutate(chromosome, mutation_rate):
