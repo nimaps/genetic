@@ -5,13 +5,30 @@ from .encodings import Encoding
 from .utils import cumulative_sum
 
 
-def create_random_chromosome(gene_list):
+def create_random_permutation(gene_list):
     chromosome = random.sample(gene_list, len(gene_list))
     return chromosome
 
 
-def initial_population(population_size: int, gene_list):
-    return [create_random_chromosome(gene_list) for _ in range(population_size)]
+def create_random_byte_array(chromosome_size: int):
+    num = random.randint(0, (2**chromosome_size) - 1)
+    chromosome = [int(gene) for gene in format(num, f"0{chromosome_size}b")]
+    return chromosome
+
+
+def initial_population(
+    population_size: int, gene_list: List[str | float] = None, chromosome_size: int = 0
+):
+    if gene_list:
+        return [create_random_permutation(gene_list) for _ in range(population_size)]
+
+    if chromosome_size is None:
+        raise ValueError
+
+    return [
+        create_random_byte_array(chromosome_size=chromosome_size)
+        for _ in range(population_size)
+    ]
 
 
 def selection(population_ranked, elitism_size):
@@ -45,7 +62,7 @@ def get_mating_pool(population, selection_results):
     return pool
 
 
-def breed(parent1, parent2):
+def ordered_crossover(parent1, parent2):
     child = []
     child_p1 = []
     child_p2 = []
@@ -65,18 +82,18 @@ def breed(parent1, parent2):
     return child
 
 
-def breed_population(mating_pool, elite_count):
-    children = []
-    length = len(mating_pool) - elite_count
-    pool = random.sample(mating_pool, len(mating_pool))
+def one_point_crossover(parent1, parent2):
+    child = []
 
-    for i in range(elite_count):
-        children.append(mating_pool[i])
+    crossover_point = int(random.random() * len(parent1))
 
-    for i in range(length):
-        child = breed(pool[i], pool[len(mating_pool) - i - 1])
-        children.append(child)
-    return children
+    for i in range(crossover_point):
+        child.append(parent1[i])
+
+    for i in range(crossover_point, len(parent2)):
+        child.append(parent2[i])
+
+    return child
 
 
 def swap_mutate(chromosome, mutation_rate):
@@ -107,19 +124,16 @@ def flip_mutate(
     return new_chromosome
 
 
-def mutate_population(population, mutation_rate):
-    return [swap_mutate(chromosome, mutation_rate) for chromosome in population]
-
-
 class Genetic:
     def __init__(
         self,
-        population,
         population_size,
         elitism_size,
         mutation_rate,
         generations_count,
         encoding: Encoding,
+        population=None,
+        chromosome_size: int = None,
     ) -> None:
         self.population = population
         self.population_size = population_size
@@ -127,16 +141,25 @@ class Genetic:
         self.mutation_rate = mutation_rate
         self.generations_count = generations_count
         self.encoding = encoding
+        self.chromosome_size = chromosome_size
 
         if self.encoding == Encoding.PERMUTATION:
             self.mutate_chromosome = swap_mutate
+            self.crossover = ordered_crossover
         elif self.encoding == Encoding.BINARY:
             self.mutate_chromosome = flip_mutate
+            self.crossover = one_point_crossover
         else:
             raise NotImplementedError
 
     def get_best_solution(self):
-        pop = initial_population(self.population_size, self.population)
+
+        if self.encoding == Encoding.PERMUTATION:
+            pop = initial_population(self.population_size, gene_list=self.population)
+        elif self.encoding == Encoding.BINARY:
+            pop = initial_population(
+                self.population_size, chromosome_size=self.chromosome_size
+            )
         print("Initial distance: " + str(1 / self.rank_chromosomes(pop)[0][1]))
 
         for _ in range(0, self.generations_count):
@@ -149,7 +172,7 @@ class Genetic:
 
     def rank_chromosomes(self, population):
         fitness_results = {}
-        for i in range(0, len(population)):
+        for i in range(len(population)):
             fitness_results[i] = self.fitness(population[i])
         return sorted(fitness_results.items(), key=lambda x: x[1], reverse=True)
 
@@ -157,9 +180,28 @@ class Genetic:
         population_ranked = self.rank_chromosomes(current_gen)
         selection_results = selection(population_ranked, elite_count)
         pool = get_mating_pool(current_gen, selection_results)
-        children = breed_population(pool, elite_count)
-        next_generations = mutate_population(children, mutation_rate)
+        children = self.breed_population(pool, elite_count)
+        next_generations = self.mutate_population(children, mutation_rate)
         return next_generations
+
+    def mutate_population(self, population, mutation_rate):
+        return [
+            self.mutate_chromosome(chromosome, mutation_rate)
+            for chromosome in population
+        ]
+
+    def breed_population(self, mating_pool, elite_count):
+        children = []
+        length = len(mating_pool) - elite_count
+        pool = random.sample(mating_pool, len(mating_pool))
+
+        for i in range(elite_count):
+            children.append(mating_pool[i])
+
+        for i in range(length):
+            child = self.crossover(pool[i], pool[len(mating_pool) - i - 1])
+            children.append(child)
+        return children
 
     def fitness(self, chromosome) -> float:
         raise NotImplementedError
