@@ -79,16 +79,18 @@ def breed_population(mating_pool, elite_count):
 
 def swap_mutate(chromosome, mutation_rate):
 
+    new_chromosome = chromosome[:]
+
     if random.random() < mutation_rate:
         swapped, swap_with = 1, 1
         while swapped == swap_with:
             swapped = int(random.random() * len(chromosome))
             swap_with = int(random.random() * len(chromosome))
-        chromosome[swap_with], chromosome[swapped] = (
-            chromosome[swapped],
-            chromosome[swap_with],
+        new_chromosome[swap_with], new_chromosome[swapped] = (
+            new_chromosome[swapped],
+            new_chromosome[swap_with],
         )
-    return chromosome
+    return new_chromosome
 
 
 def mutate_population(population, mutation_rate):
