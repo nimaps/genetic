@@ -37,7 +37,7 @@ def selection(population_ranked, elitism_size):
 
 def get_mating_pool(population, selection_results):
     pool = []
-    for i in range(0, len(selection_results)):
+    for i in range(len(selection_results)):
         index = selection_results[i]
         pool.append(population[index])
     return pool
