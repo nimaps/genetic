@@ -90,12 +90,7 @@ def swap_mutate(chromosome, mutation_rate):
 
 
 def mutate_population(population, mutation_rate):
-    mutated_population = []
-
-    for ind in range(len(population)):
-        mutated_chromosome = swap_mutate(population[ind], mutation_rate)
-        mutated_population.append(mutated_chromosome)
-    return mutated_population
+    return [swap_mutate(chromosome, mutation_rate) for chromosome in population]
 
 
 class Genetic:
