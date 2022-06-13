@@ -77,7 +77,7 @@ def breed_population(mating_pool, elite_count):
     return children
 
 
-def mutate(chromosome, mutation_rate):
+def swap_mutate(chromosome, mutation_rate):
 
     for swapped in range(len(chromosome)):
         if random.random() < mutation_rate:
@@ -93,7 +93,7 @@ def mutate_population(population, mutation_rate):
     mutated_population = []
 
     for ind in range(len(population)):
-        mutated_chromosome = mutate(population[ind], mutation_rate)
+        mutated_chromosome = swap_mutate(population[ind], mutation_rate)
         mutated_population.append(mutated_chromosome)
     return mutated_population
 
