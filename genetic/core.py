@@ -1,5 +1,7 @@
 import random
+from typing import List
 
+from .encodings import Encoding
 from .utils import cumulative_sum
 
 
@@ -93,6 +95,18 @@ def swap_mutate(chromosome, mutation_rate):
     return new_chromosome
 
 
+def flip_mutate(
+    chromosome: List[str | float], mutation_rate: float
+) -> List[str | float]:
+
+    new_chromosome = chromosome[:]
+
+    if random.random() < mutation_rate:
+        swapped = int(random.random() * len(chromosome))
+        new_chromosome[swapped] ^= 1
+    return new_chromosome
+
+
 def mutate_population(population, mutation_rate):
     return [swap_mutate(chromosome, mutation_rate) for chromosome in population]
 
@@ -105,12 +119,21 @@ class Genetic:
         elitism_size,
         mutation_rate,
         generations_count,
+        encoding: Encoding,
     ) -> None:
         self.population = population
         self.population_size = population_size
         self.elitism_size = elitism_size
         self.mutation_rate = mutation_rate
         self.generations_count = generations_count
+        self.encoding = encoding
+
+        if self.encoding == Encoding.PERMUTATION:
+            self.mutate_chromosome = swap_mutate
+        elif self.encoding == Encoding.BINARY:
+            self.mutate_chromosome = flip_mutate
+        else:
+            raise NotImplementedError
 
     def get_best_solution(self):
         pop = initial_population(self.population_size, self.population)
