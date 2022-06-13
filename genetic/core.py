@@ -160,14 +160,12 @@ class Genetic:
             pop = initial_population(
                 self.population_size, chromosome_size=self.chromosome_size
             )
-        print("Initial distance: " + str(1 / self.rank_chromosomes(pop)[0][1]))
 
         for _ in range(0, self.generations_count):
             pop = self.next_generation(pop, self.elitism_size, self.mutation_rate)
 
-        print("Final distance: " + str(1 / self.rank_chromosomes(pop)[0][1]))
-        best_route_index = self.rank_chromosomes(pop)[0][0]
-        best_route = pop[best_route_index]
+        best_solution_index = self.rank_chromosomes(pop)[0][0]
+        best_route = pop[best_solution_index]
         return best_route
 
     def rank_chromosomes(self, population):
