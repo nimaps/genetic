@@ -126,9 +126,8 @@ class Genetic:
 
     def rank_chromosomes(self, population):
         fitness_results = {}
-        fitness_function = self.__get_fitness_function()
         for i in range(0, len(population)):
-            fitness_results[i] = fitness_function(population[i])
+            fitness_results[i] = self.fitness(population[i])
         return sorted(fitness_results.items(), key=lambda x: x[1], reverse=True)
 
     def next_generation(self, current_gen, elite_count, mutation_rate):
@@ -139,8 +138,5 @@ class Genetic:
         next_generations = mutate_population(children, mutation_rate)
         return next_generations
 
-    def __get_fitness_function(self):
-        return self.fitness_function
-
-    def fitness_function(self, chromosome) -> float:
+    def fitness(self, chromosome) -> float:
         raise NotImplementedError
