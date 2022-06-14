@@ -156,8 +156,8 @@ class Genetic:
             pop = self.next_generation(pop, self.elitism_size, self.mutation_rate)
 
         best_solution_index = self.rank_chromosomes(pop)[0][0]
-        best_route = pop[best_solution_index]
-        return best_route
+        best_chromosome = pop[best_solution_index]
+        return best_chromosome
 
     def rank_chromosomes(self, population):
         fitness_results = {}
