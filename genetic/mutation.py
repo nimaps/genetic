@@ -6,15 +6,16 @@ def swap_mutate(chromosome, mutation_rate):
 
     new_chromosome = chromosome[:]
 
-    if random.random() < mutation_rate:
-        swapped, swap_with = 1, 1
-        while swapped == swap_with:
-            swapped = int(random.random() * len(chromosome))
+    for swapped in range(len(chromosome)):
+        if random.random() < mutation_rate:
             swap_with = int(random.random() * len(chromosome))
-        new_chromosome[swap_with], new_chromosome[swapped] = (
-            new_chromosome[swapped],
-            new_chromosome[swap_with],
-        )
+
+            # swap genes
+            new_chromosome[swapped], new_chromosome[swap_with] = (
+                new_chromosome[swap_with],
+                new_chromosome[swapped],
+            )
+
     return new_chromosome
 
 
@@ -24,7 +25,8 @@ def flip_mutate(
 
     new_chromosome = chromosome[:]
 
-    if random.random() < mutation_rate:
-        swapped = int(random.random() * len(chromosome))
-        new_chromosome[swapped] ^= 1
+    for swapped in range(len(chromosome)):
+        if random.random() < mutation_rate:
+            new_chromosome[swapped] ^= 1
+
     return new_chromosome
