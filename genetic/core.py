@@ -1,7 +1,9 @@
 import random
 from typing import List
 
+from .crossover import one_point_crossover, ordered_crossover
 from .encodings import Encoding
+from .mutation import flip_mutate, swap_mutate
 from .utils import cumulative_sum
 
 
@@ -60,59 +62,6 @@ def get_mating_pool(population, selection_results):
         index = selection_results[i]
         pool.append(population[index])
     return pool
-
-
-def ordered_crossover(parent1, parent2):
-    child = []
-    child_p1 = []
-    child_p2 = []
-
-    gene_a = int(random.random() * len(parent1))
-    gene_b = int(random.random() * len(parent1))
-
-    start_gene = min(gene_a, gene_b)
-    end_gene = max(gene_a, gene_b)
-
-    for i in range(start_gene, end_gene):
-        child_p1.append(parent1[i])
-
-    child_p2 = [item for item in parent2 if item not in child_p1]
-
-    child = child_p2[:start_gene] + child_p1 + child_p2[start_gene:]
-    return child
-
-
-def one_point_crossover(parent1, parent2):
-    crossover_point = int(random.random() * len(parent1))
-    return parent1[:crossover_point] + parent2[crossover_point:]
-
-
-def swap_mutate(chromosome, mutation_rate):
-
-    new_chromosome = chromosome[:]
-
-    if random.random() < mutation_rate:
-        swapped, swap_with = 1, 1
-        while swapped == swap_with:
-            swapped = int(random.random() * len(chromosome))
-            swap_with = int(random.random() * len(chromosome))
-        new_chromosome[swap_with], new_chromosome[swapped] = (
-            new_chromosome[swapped],
-            new_chromosome[swap_with],
-        )
-    return new_chromosome
-
-
-def flip_mutate(
-    chromosome: List[str | float], mutation_rate: float
-) -> List[str | float]:
-
-    new_chromosome = chromosome[:]
-
-    if random.random() < mutation_rate:
-        swapped = int(random.random() * len(chromosome))
-        new_chromosome[swapped] ^= 1
-    return new_chromosome
 
 
 class Genetic:

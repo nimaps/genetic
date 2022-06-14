@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from genetic.core import flip_mutate, swap_mutate
+from genetic.mutation import flip_mutate, swap_mutate
 
 
 class TestSwapMutation(TestCase):
