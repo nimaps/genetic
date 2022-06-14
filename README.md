@@ -5,14 +5,12 @@ GAF is a Modern 🤖 Fast ⚡ Easy-to-use 🧀 flexible 🥳 Genetic Algorithm F
 
 ## Installation
 
-Install my-project with poetry
-
-Make sure you have poetry installed. you can install poetry using pip:
+Make sure you have `poetry` installed. you can install it using pip:
 ```bash
 pip install poetry
 ```
 
-then install the project:
+then install the project using `poetry`:
 
 ```bash
 poetry install
@@ -23,9 +21,6 @@ Now you can easily import the library in your python modules:
 ```python
 import genetic
 ```
-## Authors
-
-- [@nimaps](https://www.github.com/nimaps)
 
 
 ## Running Tests
@@ -33,7 +28,7 @@ import genetic
 To run tests, first make sure you have pytest installed, then run the following command
 
 ```bash
-  python -m pytest
+python -m pytest
 ```
 
 
@@ -84,3 +79,7 @@ It's that easy!!
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
+## Authors
+
+- [@nimaps](https://www.github.com/nimaps)
