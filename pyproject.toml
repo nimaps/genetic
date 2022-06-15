@@ -6,6 +6,7 @@ authors = ["Nima <sadev.inform@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+matplotlib = "^3.5.2"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
