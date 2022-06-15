@@ -92,6 +92,8 @@ class Genetic:
         else:
             raise NotImplementedError
 
+        self.progress = []
+
     def get_best_solution(self):
 
         if self.encoding == Encoding.PERMUTATION:
@@ -100,6 +102,8 @@ class Genetic:
             pop = initial_population(
                 self.population_size, chromosome_size=self.chromosome_size
             )
+
+        self.progress.append(self.rank_chromosomes(pop)[0][1])
 
         for _ in range(0, self.generations_count):
             pop = self.next_generation(pop, self.elitism_size, self.mutation_rate)
@@ -120,6 +124,7 @@ class Genetic:
         pool = get_mating_pool(current_gen, selection_results)
         children = self.breed_population(pool, elite_count)
         next_generations = self.mutate_population(children, mutation_rate)
+        self.progress.append(self.rank_chromosomes(next_generations)[0][1])
         return next_generations
 
     def mutate_population(self, population, mutation_rate):
