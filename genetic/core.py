@@ -105,7 +105,7 @@ class Genetic:
 
         self.progress.append(self.rank_chromosomes(pop)[0][1])
 
-        for _ in range(0, self.generations_count):
+        for _ in range(self.generations_count):
             pop = self.next_generation(pop, self.elitism_size, self.mutation_rate)
 
         best_solution_index = self.rank_chromosomes(pop)[0][0]
